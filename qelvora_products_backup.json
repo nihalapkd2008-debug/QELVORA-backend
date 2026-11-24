@@ -1,0 +1,765 @@
+[
+{
+  "model": "products.category",
+  "pk": 1,
+  "fields": {
+    "name": "Clothing",
+    "description": "Discover timeless clothing essentials designed with modern style, comfort and elegance for every occasion."
+  }
+},
+{
+  "model": "products.category",
+  "pk": 2,
+  "fields": {
+    "name": "Bags",
+    "description": "Explore a refined collection of everyday bags and statement pieces that combine functionality with contemporary fashion."
+  }
+},
+{
+  "model": "products.category",
+  "pk": 3,
+  "fields": {
+    "name": "Footwear",
+    "description": "Step into style with carefully selected footwear that brings together comfort, quality and modern design."
+  }
+},
+{
+  "model": "products.category",
+  "pk": 4,
+  "fields": {
+    "name": "Accessories",
+    "description": "Complete your look with thoughtfully curated accessories that add a distinctive touch to your personal style."
+  }
+},
+{
+  "model": "products.category",
+  "pk": 5,
+  "fields": {
+    "name": "Watches",
+    "description": "Precision timepieces crafted to elevate your look—from sleek minimalist dials to bold statement chronographs."
+  }
+},
+{
+  "model": "products.category",
+  "pk": 6,
+  "fields": {
+    "name": "Jewelry",
+    "description": "Delicate chains, stackable rings, and lightweight studs made for effortless daily wear."
+  }
+},
+{
+  "model": "products.product",
+  "pk": 1,
+  "fields": {
+    "category": 1,
+    "name": "Aurelle Classic Shirt",
+    "description": "A versatile everyday shirt crafted for effortless style and comfortable wear.",
+    "price": "1499.00",
+    "stock": 25,
+    "image": null,
+    "created_at": "2026-11-14T08:08:49.143Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 2,
+  "fields": {
+    "category": 2,
+    "name": "Velmora Everyday Tote",
+    "description": "A contemporary tote bag designed to complement everyday essentials with understated elegance.",
+    "price": "2299.00",
+    "stock": 15,
+    "image": null,
+    "created_at": "2026-11-14T08:09:27.351Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 3,
+  "fields": {
+    "category": 3,
+    "name": "Novelle Urban Sneakers",
+    "description": "Modern casual sneakers designed for versatile styling and everyday comfort.",
+    "price": "2799.00",
+    "stock": 20,
+    "image": null,
+    "created_at": "2026-11-14T08:10:12.109Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 4,
+  "fields": {
+    "category": 5,
+    "name": "Orvella Classic Watch",
+    "description": "A minimal everyday watch featuring a timeless design that complements modern outfits.",
+    "price": "1899.00",
+    "stock": 12,
+    "image": null,
+    "created_at": "2026-11-14T08:10:50.778Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 5,
+  "fields": {
+    "category": 1,
+    "name": "Classic Cotton Shirt",
+    "description": "A versatile cotton shirt for effortless everyday styling.",
+    "price": "1499.00",
+    "stock": 25,
+    "image": null,
+    "created_at": "2026-11-14T08:45:39.619Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 6,
+  "fields": {
+    "category": 1,
+    "name": "Premium Linen Shirt",
+    "description": "A lightweight linen shirt with a refined, relaxed finish.",
+    "price": "1899.00",
+    "stock": 18,
+    "image": null,
+    "created_at": "2026-11-14T08:47:50.919Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 7,
+  "fields": {
+    "category": 1,
+    "name": "Everyday Casual T-Shirt",
+    "description": "A comfortable essential designed for simple everyday outfits.",
+    "price": "799.00",
+    "stock": 35,
+    "image": null,
+    "created_at": "2026-11-14T08:48:20.005Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 8,
+  "fields": {
+    "category": 1,
+    "name": "Classic Polo T-Shirt",
+    "description": "A timeless polo with a smart and comfortable look.",
+    "price": "999.00",
+    "stock": 22,
+    "image": null,
+    "created_at": "2026-11-14T08:49:02.294Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 9,
+  "fields": {
+    "category": 1,
+    "name": "Relaxed Fit Hoodie",
+    "description": "A soft hoodie made for casual and laid-back styling.",
+    "price": "1799.00",
+    "stock": 16,
+    "image": null,
+    "created_at": "2026-11-14T08:49:36.405Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 10,
+  "fields": {
+    "category": 1,
+    "name": "Minimal Crew Neck Sweatshirt",
+    "description": "A clean crew-neck design for versatile daily wear.",
+    "price": "1600.00",
+    "stock": 20,
+    "image": null,
+    "created_at": "2026-11-14T08:50:05.527Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 11,
+  "fields": {
+    "category": 1,
+    "name": "Tailored Formal Trousers",
+    "description": "Smart trousers designed for polished everyday occasions.",
+    "price": "1999.00",
+    "stock": 14,
+    "image": null,
+    "created_at": "2026-11-14T08:50:30.195Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 12,
+  "fields": {
+    "category": 1,
+    "name": "Straight Fit Denim Jeans",
+    "description": "Classic denim with a versatile straight-fit silhouette.",
+    "price": "2199.00",
+    "stock": 19,
+    "image": null,
+    "created_at": "2026-11-14T08:50:59.936Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 13,
+  "fields": {
+    "category": 1,
+    "name": "Relaxed Fit Cargo Pants",
+    "description": "Functional cargo pants with a contemporary casual style.",
+    "price": "1899.00",
+    "stock": 17,
+    "image": null,
+    "created_at": "2026-11-14T08:51:40.817Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 14,
+  "fields": {
+    "category": 1,
+    "name": "Classic A-Line Dress",
+    "description": "An elegant A-line dress suitable for multiple occasions.",
+    "price": "2499.00",
+    "stock": 0,
+    "image": null,
+    "created_at": "2026-11-14T08:52:19.706Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 15,
+  "fields": {
+    "category": 1,
+    "name": "Everyday Midi Dress",
+    "description": "A versatile midi dress with a simple modern design.",
+    "price": "2299.00",
+    "stock": 15,
+    "image": null,
+    "created_at": "2026-11-14T08:52:44.658Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 16,
+  "fields": {
+    "category": 1,
+    "name": "Elegant Wrap Dress",
+    "description": "A graceful wrap-style dress with a flattering silhouette.",
+    "price": "2699.00",
+    "stock": 10,
+    "image": null,
+    "created_at": "2026-11-14T08:53:16.378Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 17,
+  "fields": {
+    "category": 1,
+    "name": "Lightweight Summer Jacket",
+    "description": "A lightweight outer layer for effortless seasonal styling.",
+    "price": "2799.00",
+    "stock": 11,
+    "image": null,
+    "created_at": "2026-11-14T08:53:48.583Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 18,
+  "fields": {
+    "category": 1,
+    "name": "Classic Blazer Jacket",
+    "description": "A structured blazer that adds a refined touch to outfits.",
+    "price": "3499.00",
+    "stock": 8,
+    "image": null,
+    "created_at": "2026-11-14T08:54:12.415Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 19,
+  "fields": {
+    "category": 1,
+    "name": "Premium Casual Shorts",
+    "description": "Comfortable shorts designed for relaxed everyday wear.",
+    "price": "1099.00",
+    "stock": 24,
+    "image": null,
+    "created_at": "2026-11-14T08:54:43.311Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 20,
+  "fields": {
+    "category": 2,
+    "name": "Structured Everyday Tote",
+    "description": "A spacious tote designed for daily essentials and modern styling.",
+    "price": "2299.00",
+    "stock": 15,
+    "image": null,
+    "created_at": "2026-11-14T08:55:30.624Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 21,
+  "fields": {
+    "category": 2,
+    "name": "Classic Shoulder Bag",
+    "description": "A versatile shoulder bag with a timeless silhouette.",
+    "price": "2499.00",
+    "stock": 12,
+    "image": null,
+    "created_at": "2026-11-14T08:55:51.688Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 22,
+  "fields": {
+    "category": 2,
+    "name": "Minimal Crossbody Bag",
+    "description": "A compact crossbody bag for convenient everyday use.",
+    "price": "1899.00",
+    "stock": 20,
+    "image": null,
+    "created_at": "2026-11-14T08:56:28.858Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 23,
+  "fields": {
+    "category": 2,
+    "name": "Premium Leather Handbag",
+    "description": "A refined handbag with an elegant and structured finish.",
+    "price": "3999.00",
+    "stock": 8,
+    "image": null,
+    "created_at": "2026-11-14T08:57:00.725Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 24,
+  "fields": {
+    "category": 2,
+    "name": "Casual Canvas Backpack",
+    "description": "A lightweight backpack for everyday essentials.",
+    "price": "1799.00",
+    "stock": 18,
+    "image": null,
+    "created_at": "2026-11-14T08:57:37.173Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 25,
+  "fields": {
+    "category": 2,
+    "name": "Modern Laptop Backpack",
+    "description": "A practical backpack designed to carry daily work essentials.",
+    "price": "2799.00",
+    "stock": 10,
+    "image": null,
+    "created_at": "2026-11-14T08:58:08.397Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 26,
+  "fields": {
+    "category": 2,
+    "name": "Elegant Evening Clutch",
+    "description": "A compact clutch designed for special occasions.",
+    "price": "1599.00",
+    "stock": 14,
+    "image": null,
+    "created_at": "2026-11-14T08:58:42.567Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 27,
+  "fields": {
+    "category": 2,
+    "name": "Weekend Travel Duffle",
+    "description": "A spacious duffle bag suited for short trips and travel.",
+    "price": "3299.00",
+    "stock": 9,
+    "image": null,
+    "created_at": "2026-11-14T08:59:13.183Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 28,
+  "fields": {
+    "category": 2,
+    "name": "Compact Mini Handbag",
+    "description": "A stylish mini handbag for carrying everyday essentials.",
+    "price": "1999.11",
+    "stock": 16,
+    "image": null,
+    "created_at": "2026-11-14T08:59:45.694Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 29,
+  "fields": {
+    "category": 3,
+    "name": "Classic Everyday Sneakers",
+    "description": "Versatile sneakers designed for comfortable daily styling.",
+    "price": "2799.00",
+    "stock": 20,
+    "image": null,
+    "created_at": "2026-11-14T09:00:20.653Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 30,
+  "fields": {
+    "category": 3,
+    "name": "Minimal White Sneakers",
+    "description": "Clean white sneakers with a timeless casual look.",
+    "price": "2999.00",
+    "stock": 15,
+    "image": null,
+    "created_at": "2026-11-14T09:01:00.048Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 31,
+  "fields": {
+    "category": 3,
+    "name": "Casual Slip-On Shoes",
+    "description": "Easy-to-wear shoes designed for everyday convenience.",
+    "price": "1899.00",
+    "stock": 18,
+    "image": null,
+    "created_at": "2026-11-14T09:01:44.248Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 32,
+  "fields": {
+    "category": 3,
+    "name": "Classic Leather Loafers",
+    "description": "Refined loafers that complement smart casual outfits.",
+    "price": "3499.00",
+    "stock": 10,
+    "image": null,
+    "created_at": "2026-11-14T09:02:08.215Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 33,
+  "fields": {
+    "category": 3,
+    "name": "Everyday Flat Sandals",
+    "description": "Comfortable sandals with a simple, versatile design.",
+    "price": "1299.00",
+    "stock": 25,
+    "image": null,
+    "created_at": "2026-11-14T09:02:40.619Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 34,
+  "fields": {
+    "category": 3,
+    "name": "Minimal Strap Sandals",
+    "description": "Elegant strap sandals for effortless everyday styling.",
+    "price": "1599.00",
+    "stock": 17,
+    "image": null,
+    "created_at": "2026-11-14T09:03:29.337Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 35,
+  "fields": {
+    "category": 3,
+    "name": "Casual Running Shoes",
+    "description": "Lightweight shoes designed for everyday movement.",
+    "price": "2499.00",
+    "stock": 14,
+    "image": null,
+    "created_at": "2026-11-14T09:04:40.639Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 36,
+  "fields": {
+    "category": 3,
+    "name": "Classic Ankle Boots",
+    "description": "Stylish ankle boots with a timeless modern finish.",
+    "price": "3799.00",
+    "stock": 8,
+    "image": null,
+    "created_at": "2026-11-14T09:05:08.031Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 37,
+  "fields": {
+    "category": 3,
+    "name": "Elegant Block Heels",
+    "description": "Comfortable block heels for a polished look.",
+    "price": "2299.00",
+    "stock": 12,
+    "image": null,
+    "created_at": "2026-11-14T09:05:34.726Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 38,
+  "fields": {
+    "category": 5,
+    "name": "Classic Minimal Watch",
+    "description": "A clean, timeless watch for everyday styling.",
+    "price": "1899.00",
+    "stock": 12,
+    "image": null,
+    "created_at": "2026-11-14T09:06:06.899Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 39,
+  "fields": {
+    "category": 5,
+    "name": "Premium Leather Strap Watch",
+    "description": "A refined watch featuring a classic leather strap.",
+    "price": "2499.00",
+    "stock": 10,
+    "image": null,
+    "created_at": "2026-11-14T09:06:38.092Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 40,
+  "fields": {
+    "category": 5,
+    "name": "Modern Metal Bracelet Watch",
+    "description": "A contemporary watch with a polished metal bracelet.",
+    "price": "2999.00",
+    "stock": 9,
+    "image": null,
+    "created_at": "2026-11-14T09:07:11.088Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 41,
+  "fields": {
+    "category": 5,
+    "name": "Elegant Rose Gold Watch",
+    "description": "A sophisticated watch with a subtle rose-gold finish.",
+    "price": "3299.00",
+    "stock": 7,
+    "image": null,
+    "created_at": "2026-11-14T09:07:52.616Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 42,
+  "fields": {
+    "category": 5,
+    "name": "Classic Chronograph Watch",
+    "description": "A detailed watch design with a sporty, refined appearance.",
+    "price": "3799.00",
+    "stock": 6,
+    "image": null,
+    "created_at": "2026-11-14T09:08:42.292Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 43,
+  "fields": {
+    "category": 5,
+    "name": "Everyday Digital Watch",
+    "description": "A practical digital watch for everyday use.",
+    "price": "1499.00",
+    "stock": 15,
+    "image": null,
+    "created_at": "2026-11-14T09:09:08.600Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 44,
+  "fields": {
+    "category": 6,
+    "name": "Minimal Pendant Necklace",
+    "description": "A delicate pendant necklace for simple everyday styling.",
+    "price": "999.00",
+    "stock": 20,
+    "image": null,
+    "created_at": "2026-11-14T09:09:45.314Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 45,
+  "fields": {
+    "category": 6,
+    "name": "Classic Hoop Earrings",
+    "description": "Timeless hoop earrings that complement different outfits.",
+    "price": "799.00",
+    "stock": 25,
+    "image": null,
+    "created_at": "2026-11-14T09:10:16.919Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 46,
+  "fields": {
+    "category": 6,
+    "name": "Elegant Chain Bracelet",
+    "description": "A refined bracelet with a minimal chain design.",
+    "price": "1199.00",
+    "stock": 16,
+    "image": null,
+    "created_at": "2026-11-14T09:10:45.615Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 47,
+  "fields": {
+    "category": 6,
+    "name": "Modern Statement Ring",
+    "description": "A distinctive ring designed to add detail to your look.",
+    "price": "899.00",
+    "stock": 18,
+    "image": null,
+    "created_at": "2026-11-14T09:11:09.874Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 48,
+  "fields": {
+    "category": 6,
+    "name": "Layered Necklace Set",
+    "description": "A coordinated necklace set for a stylish layered look.",
+    "price": "1499.00",
+    "stock": 12,
+    "image": null,
+    "created_at": "2026-11-14T09:11:40.668Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 49,
+  "fields": {
+    "category": 4,
+    "name": "Classic Leather Belt",
+    "description": "A versatile belt with a clean and timeless finish.",
+    "price": "999.00",
+    "stock": 20,
+    "image": null,
+    "created_at": "2026-11-14T09:12:32.944Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 50,
+  "fields": {
+    "category": 4,
+    "name": "Premium Card Holder",
+    "description": "A compact card holder designed for everyday essentials.",
+    "price": "699.00",
+    "stock": 24,
+    "image": null,
+    "created_at": "2026-11-14T09:13:10.557Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 51,
+  "fields": {
+    "category": 4,
+    "name": "Minimal Frame Sunglasses",
+    "description": "Modern sunglasses with a clean and versatile design.",
+    "price": "1299.00",
+    "stock": 3,
+    "image": null,
+    "created_at": "2026-11-14T09:13:38.721Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 52,
+  "fields": {
+    "category": 4,
+    "name": "Minimal Frame Sunglasses",
+    "description": "Modern sunglasses with a clean and versatile design.",
+    "price": "1299.00",
+    "stock": 15,
+    "image": null,
+    "created_at": "2026-11-14T09:13:49.982Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 53,
+  "fields": {
+    "category": 4,
+    "name": "Soft Everyday Scarf",
+    "description": "A lightweight scarf that adds a refined finishing touch.",
+    "price": "899.00",
+    "stock": 18,
+    "image": null,
+    "created_at": "2026-11-14T09:14:13.919Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 54,
+  "fields": {
+    "category": 4,
+    "name": "Classic Baseball Cap",
+    "description": "A versatile cap for relaxed everyday outfits.",
+    "price": "699.00",
+    "stock": 22,
+    "image": null,
+    "created_at": "2026-11-14T09:14:40.866Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 55,
+  "fields": {
+    "category": 4,
+    "name": "Reversible Fashion Belt",
+    "description": "A practical reversible belt for versatile styling.",
+    "price": "1199.00",
+    "stock": 13,
+    "image": null,
+    "created_at": "2026-11-14T09:15:10.443Z"
+  }
+}
+]
