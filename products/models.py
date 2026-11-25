@@ -5,20 +5,79 @@ from django.db.models import UniqueConstraint
 from django.core.validators import MinValueValidator
 
 
-class Category(models.Model):
+# Soft Delete QuerySet
+class SoftDeleteQuerySet(models.QuerySet):
+    def delete(self):
+        count = self.update(is_deleted=True)
+        return count, {self.model._meta.label: count}
+
+    def hard_delete(self):
+        return super().delete()
+
+
+# Show only active records
+class SoftDeleteManager(models.Manager.from_queryset(SoftDeleteQuerySet)):
+    def get_queryset(self):
+        return super().get_queryset().filter(is_deleted=False)
+
+
+# Access all records, including deleted ones
+class AllObjectsManager(
+    models.Manager.from_queryset(SoftDeleteQuerySet)
+):
+    pass
+
+
+# Abstract Base Model
+class BaseModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_deleted = models.BooleanField(default=False)
+
+    objects = SoftDeleteManager()
+    all_objects = AllObjectsManager()
+
+    class Meta:
+        abstract = True
+
+    def delete(self, using=None, keep_parents=False):
+        self.is_deleted = True
+        self.save(
+            using=using,
+            update_fields=["is_deleted", "updated_at"]
+        )
+        return 1, {self._meta.label: 1}
+
+    def hard_delete(self):
+        return super().delete()
+
+    def restore(self):
+        self.is_deleted = False
+        self.save(update_fields=["is_deleted", "updated_at"])
+
+
+class Category(BaseModel):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True)
-
+    
     def __str__(self):
         return self.name
+    
+   
 
-
-class Product(models.Model):
+class Product(BaseModel):
     category = models.ForeignKey(
         Category,
         on_delete=models.PROTECT,
-        related_name='products'
+        related_name="products"
     )
+    vendor = models.ForeignKey(
+                settings.AUTH_USER_MODEL,
+                on_delete=models.SET_NULL,
+                null=True,
+                blank=True,
+                related_name="vendor_products"
+            )
     name = models.CharField(max_length=200)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -28,8 +87,6 @@ class Product(models.Model):
         blank=True,
         null=True
     )
-
-    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
@@ -75,7 +132,6 @@ class CartItem(models.Model):
         return f"{self.product.name} x {self.quantity}"
 
 
-# ORDER MODEL
 class Order(models.Model):
 
     class Status(models.TextChoices):
@@ -109,7 +165,6 @@ class Order(models.Model):
         return f"Order #{self.id} - {self.user.username}"
 
 
-# ORDER ITEM MODEL
 class OrderItem(models.Model):
 
     order = models.ForeignKey(
@@ -129,7 +184,6 @@ class OrderItem(models.Model):
         validators=[MinValueValidator(1)]
     )
 
-    # Product price at the time of purchase
     price = models.DecimalField(
         max_digits=10,
         decimal_places=2

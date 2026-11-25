@@ -1,0 +1,1563 @@
+openapi: 3.0.3
+info:
+  title: QELVORA API
+  version: 1.0.0
+  description: "\n    QELVORA Fashion E-Commerce API.\n\n    This API manages customer
+    accounts, authentication,\n    products, categories, shopping carts, orders,\n
+    \   vendor applications and admin operations.\n    "
+paths:
+  /api/accounts/admin/users/:
+    get:
+      operationId: accounts_admin_users_list
+      tags:
+      - accounts
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AdminUser'
+          description: ''
+  /api/accounts/admin/users/{id}/:
+    get:
+      operationId: accounts_admin_users_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - accounts
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminUser'
+          description: ''
+    patch:
+      operationId: accounts_admin_users_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminUserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminUserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminUserRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminUser'
+          description: ''
+  /api/accounts/vendor/apply/:
+    post:
+      operationId: accounts_vendor_apply_create
+      tags:
+      - accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VendorApplicationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VendorApplicationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VendorApplicationRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VendorApplication'
+          description: ''
+  /api/admin/products/:
+    get:
+      operationId: admin_products_list
+      description: Allows administrators to retrieve active products.
+      summary: Retrieve All Products
+      tags:
+      - Admin Products
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AdminProduct'
+          description: ''
+    post:
+      operationId: admin_products_create
+      description: Allows administrators to create products and optionally assign
+        a vendor.
+      summary: Create Product
+      tags:
+      - Admin Products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminProductRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminProductRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminProductRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminProduct'
+          description: ''
+        '400':
+          description: Invalid product details.
+        '403':
+          description: Administrator permission required.
+  /api/admin/products/{id}/:
+    get:
+      operationId: admin_products_retrieve
+      description: Retrieves details of an individual product.
+      summary: Retrieve Product
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Unique product ID.
+        required: true
+      tags:
+      - Admin Products
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminProduct'
+          description: ''
+        '404':
+          description: Product not found.
+    put:
+      operationId: admin_products_update
+      description: Allows administrators to update product details.
+      summary: Update Product
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Unique product ID.
+        required: true
+      tags:
+      - Admin Products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminProductRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminProductRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminProductRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminProduct'
+          description: ''
+        '400':
+          description: Invalid product details.
+        '404':
+          description: Product not found.
+    patch:
+      operationId: admin_products_partial_update
+      description: Allows administrators to update selected product fields.
+      summary: Partially Update Product
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Unique product ID.
+        required: true
+      tags:
+      - Admin Products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminProductRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminProductRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminProductRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminProduct'
+          description: ''
+        '400':
+          description: Invalid product details.
+        '404':
+          description: Product not found.
+    delete:
+      operationId: admin_products_destroy
+      description: Soft-deletes an active product.
+      summary: Delete Product
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Unique product ID.
+        required: true
+      tags:
+      - Admin Products
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: Product deleted successfully.
+        '404':
+          description: Product not found.
+  /api/auth/login/:
+    post:
+      operationId: auth_login_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /api/auth/me/:
+    get:
+      operationId: auth_me_retrieve
+      description: "\n        Retrieves the profile information of the currently\n
+        \       authenticated user.\n\n        Requires a valid access token.\n\n
+        \       Returns username, email, role, staff status\n        and vendor approval
+        status.\n        "
+      summary: Retrieve Current User
+      tags:
+      - Authentication
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrentUser'
+          description: ''
+        '401':
+          description: Authentication credentials were not provided or are invalid.
+  /api/auth/refresh/:
+    post:
+      operationId: auth_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/auth/register/:
+    post:
+      operationId: auth_register_create
+      description: "\n        Registers a new customer account.\n\n        Username,
+        email and password are required.\n        Password validation follows Django
+        password validators.\n\n        No authentication is required.\n        "
+      summary: Register Customer
+      tags:
+      - Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Register'
+          description: ''
+        '400':
+          description: Registration validation failed.
+  /api/cart/:
+    get:
+      operationId: cart_retrieve
+      description: "\n        Retrieves the shopping cart of the authenticated customer.\n\n
+        \       Creates an empty cart if one does not already exist.\n        Requires
+        authentication.\n        "
+      summary: Retrieve Shopping Cart
+      tags:
+      - Cart
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+          description: ''
+        '401':
+          description: Authentication required.
+    post:
+      operationId: cart_create
+      description: "\n        Adds a product to the authenticated customer's cart.\n\n
+        \       If the product already exists in the cart,\n        its quantity is
+        increased.\n\n        Requested quantity cannot exceed available stock.\n
+        \       "
+      summary: Add Product to Cart
+      tags:
+      - Cart
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartAddItemRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CartAddItemRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CartAddItemRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+        '404':
+          description: Product not found.
+        '401':
+          description: Authentication required.
+  /api/cart/items/{item_id}/:
+    patch:
+      operationId: cart_items_partial_update
+      description: "\n        Updates the quantity of a cart item belonging\n        to
+        the authenticated customer.\n\n        Quantity must be at least 1 and cannot
+        exceed\n        the available product stock.\n        "
+      summary: Update Cart Item Quantity
+      parameters:
+      - in: path
+        name: item_id
+        schema:
+          type: integer
+        description: Unique cart item ID.
+        required: true
+      tags:
+      - Cart
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCartQuantityUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCartQuantityUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCartQuantityUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+        '404':
+          description: Cart item not found.
+        '401':
+          description: Authentication required.
+    delete:
+      operationId: cart_items_destroy
+      description: "\n        Removes a cart item belonging to the authenticated customer.\n\n
+        \       Returns the updated shopping cart.\n        "
+      summary: Remove Cart Item
+      parameters:
+      - in: path
+        name: item_id
+        schema:
+          type: integer
+        description: Unique cart item ID.
+        required: true
+      tags:
+      - Cart
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+          description: ''
+        '404':
+          description: Cart item not found.
+        '401':
+          description: Authentication required.
+  /api/categories/:
+    get:
+      operationId: categories_list
+      description: "\n        Retrieves all active product categories.\n\n        Authentication
+        is not required.\n        Returns category information in JSON format.\n        "
+      summary: Retrieve Categories
+      tags:
+      - Categories
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+          description: ''
+  /api/categories/{id}/:
+    get:
+      operationId: categories_retrieve
+      description: Retrieves details of a specific category.
+      summary: Retrieve Category Details
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this category.
+        required: true
+      tags:
+      - Categories
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+        '404':
+          description: Category not found.
+  /api/orders/:
+    post:
+      operationId: orders_create
+      description: "\n        Creates an order using the authenticated customer's
+        cart.\n\n        Before creating the order, the API:\n        - Checks whether
+        the cart contains products.\n        - Checks available product stock.\n        -
+        Calculates the total order price.\n        - Creates the order and order items.\n
+        \       - Reduces product stock.\n        - Clears the customer's cart.\n\n
+        \       The operation is performed within a database transaction.\n\n        No
+        request body is required.\n        "
+      summary: Place Customer Order
+      tags:
+      - Orders
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderCreateResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+        '401':
+          description: Authentication required.
+        '404':
+          description: Cart not found.
+  /api/orders/history/:
+    get:
+      operationId: orders_history_list
+      description: "\n        Retrieves the order history of the authenticated customer.\n\n
+        \       Orders are returned in descending order of creation date.\n        Each
+        order includes its items and product details.\n\n        A customer can only
+        retrieve their own orders.\n        "
+      summary: Retrieve Customer Order History
+      tags:
+      - Orders
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+          description: ''
+        '401':
+          description: Authentication required.
+  /api/products/:
+    get:
+      operationId: products_list
+      description: "\n        Retrieves the available products in the QELVORA store.\n\n
+        \       Supported ordering:\n        - price\n        - -price\n        -
+        name\n        - created_at\n        - -created_at\n\n        Authentication
+        is not required.\n        "
+      summary: Retrieve Products
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - Products
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+          description: ''
+  /api/products/{id}/:
+    get:
+      operationId: products_retrieve
+      description: Retrieves details of an individual product.
+      summary: Retrieve Product Details
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this product.
+        required: true
+      tags:
+      - Products
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+        '404':
+          description: Product not found.
+  /api/token/:
+    post:
+      operationId: token_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /api/vendor/products/:
+    get:
+      operationId: vendor_products_list
+      description: "\n        Retrieves products belonging to the authenticated\n
+        \       approved vendor only.\n\n        Requires an approved vendor account.\n
+        \       "
+      summary: Retrieve Vendor Products
+      tags:
+      - Vendor Products
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VendorProduct'
+          description: ''
+        '401':
+          description: Authentication required.
+        '403':
+          description: Approved vendor permission required.
+    post:
+      operationId: vendor_products_create
+      description: "\n        Creates a new product for the authenticated vendor.\n\n
+        \       The vendor is automatically assigned from the authenticated user.\n
+        \       Vendor ownership cannot be selected through this request.\n        "
+      summary: Add Vendor Product
+      tags:
+      - Vendor Products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VendorProductRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VendorProductRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VendorProductRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VendorProduct'
+          description: ''
+        '400':
+          description: Invalid product details.
+        '403':
+          description: Approved vendor permission required.
+  /api/vendor/products/{id}/:
+    get:
+      operationId: vendor_products_retrieve
+      description: Retrieves a product owned by the authenticated vendor.
+      summary: Retrieve Vendor Product
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Unique product ID.
+        required: true
+      tags:
+      - Vendor Products
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VendorProduct'
+          description: ''
+        '403':
+          description: Permission denied.
+        '404':
+          description: Product not found.
+    put:
+      operationId: vendor_products_update
+      description: Replaces the details of a vendor-owned product.
+      summary: Update Vendor Product
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Unique product ID.
+        required: true
+      tags:
+      - Vendor Products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VendorProductRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VendorProductRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VendorProductRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VendorProduct'
+          description: ''
+        '400':
+          description: Invalid product details.
+        '403':
+          description: Permission denied.
+        '404':
+          description: Product not found.
+    patch:
+      operationId: vendor_products_partial_update
+      description: "\n        Updates selected fields of a vendor-owned product.\n
+        \       Can be used to update product price or stock.\n        "
+      summary: Partially Update Vendor Product
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Unique product ID.
+        required: true
+      tags:
+      - Vendor Products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedVendorProductRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedVendorProductRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedVendorProductRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VendorProduct'
+          description: ''
+        '400':
+          description: Invalid product details.
+        '403':
+          description: Permission denied.
+        '404':
+          description: Product not found.
+    delete:
+      operationId: vendor_products_destroy
+      description: Soft-deletes a product owned by the authenticated vendor.
+      summary: Delete Vendor Product
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Unique product ID.
+        required: true
+      tags:
+      - Vendor Products
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: Product deleted successfully.
+        '403':
+          description: Permission denied.
+        '404':
+          description: Product not found.
+components:
+  schemas:
+    AdminProduct:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        category:
+          type: integer
+        vendor:
+          type: integer
+          nullable: true
+        name:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        stock:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        image:
+          nullable: true
+          oneOf:
+          - type: string
+            format: uri
+            maxLength: 200
+          - type: string
+            maxLength: 0
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - category
+      - created_at
+      - description
+      - id
+      - name
+      - price
+      - updated_at
+    AdminProductRequest:
+      type: object
+      properties:
+        category:
+          type: integer
+        vendor:
+          type: integer
+          nullable: true
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        description:
+          type: string
+          minLength: 1
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        stock:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        image:
+          nullable: true
+          oneOf:
+          - type: string
+            format: uri
+            maxLength: 200
+          - type: string
+            maxLength: 0
+      required:
+      - category
+      - description
+      - name
+      - price
+    AdminUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+        email:
+          type: string
+          format: email
+          readOnly: true
+          title: Email address
+        is_active:
+          type: boolean
+          title: Active
+          description: Designates whether this user should be treated as active. Unselect
+            this instead of deleting accounts.
+        is_staff:
+          type: boolean
+          readOnly: true
+          title: Staff status
+          description: Designates whether the user can log into this admin site.
+        role:
+          type: string
+          nullable: true
+          readOnly: true
+        vendor_status:
+          type: string
+          nullable: true
+          readOnly: true
+      required:
+      - email
+      - id
+      - is_staff
+      - role
+      - username
+      - vendor_status
+    Cart:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItem'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - items
+    CartAddItemRequest:
+      type: object
+      properties:
+        product_id:
+          type: integer
+        quantity:
+          type: integer
+          minimum: 1
+          default: 1
+      required:
+      - product_id
+    CartItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        product:
+          allOf:
+          - $ref: '#/components/schemas/Product'
+          readOnly: true
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: 1
+      required:
+      - id
+      - product
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+        name:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+      required:
+      - created_at
+      - id
+      - name
+      - updated_at
+    CurrentUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+        email:
+          type: string
+          format: email
+          readOnly: true
+          title: Email address
+        is_staff:
+          type: boolean
+          readOnly: true
+          title: Staff status
+          description: Designates whether the user can log into this admin site.
+        role:
+          type: string
+          nullable: true
+          readOnly: true
+        vendor_status:
+          type: string
+          nullable: true
+          readOnly: true
+      required:
+      - email
+      - id
+      - is_staff
+      - role
+      - username
+      - vendor_status
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Description of the error.
+      required:
+      - error
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          allOf:
+          - $ref: '#/components/schemas/CurrentUser'
+          readOnly: true
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+          readOnly: true
+        total_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        status:
+          $ref: '#/components/schemas/OrderStatusEnum'
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - items
+      - user
+    OrderCreateResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        order:
+          $ref: '#/components/schemas/Order'
+      required:
+      - message
+      - order
+    OrderItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        product:
+          allOf:
+          - $ref: '#/components/schemas/Product'
+          readOnly: true
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: 1
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+      required:
+      - id
+      - price
+      - product
+    OrderStatusEnum:
+      enum:
+      - pending
+      - confirmed
+      - shipped
+      - delivered
+      - cancelled
+      type: string
+      description: |-
+        * `pending` - Pending
+        * `confirmed` - Confirmed
+        * `shipped` - Shipped
+        * `delivered` - Delivered
+        * `cancelled` - Cancelled
+    PatchedAdminProductRequest:
+      type: object
+      properties:
+        category:
+          type: integer
+        vendor:
+          type: integer
+          nullable: true
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        description:
+          type: string
+          minLength: 1
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        stock:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        image:
+          nullable: true
+          oneOf:
+          - type: string
+            format: uri
+            maxLength: 200
+          - type: string
+            maxLength: 0
+    PatchedAdminUserRequest:
+      type: object
+      properties:
+        is_active:
+          type: boolean
+          title: Active
+          description: Designates whether this user should be treated as active. Unselect
+            this instead of deleting accounts.
+    PatchedCartQuantityUpdateRequest:
+      type: object
+      properties:
+        quantity:
+          type: integer
+          minimum: 1
+    PatchedVendorProductRequest:
+      type: object
+      properties:
+        category:
+          type: integer
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        description:
+          type: string
+          minLength: 1
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        stock:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        image:
+          nullable: true
+          oneOf:
+          - type: string
+            format: uri
+            maxLength: 200
+          - type: string
+            maxLength: 0
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        category:
+          allOf:
+          - $ref: '#/components/schemas/Category'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+        name:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        stock:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        image:
+          nullable: true
+          oneOf:
+          - type: string
+            format: uri
+            maxLength: 200
+          - type: string
+            maxLength: 0
+        vendor:
+          type: integer
+          nullable: true
+      required:
+      - category
+      - created_at
+      - description
+      - id
+      - name
+      - price
+      - updated_at
+    Register:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          title: Email address
+          oneOf:
+          - type: string
+            format: email
+            maxLength: 254
+          - type: string
+            maxLength: 0
+      required:
+      - id
+      - username
+    RegisterRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 1
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          title: Email address
+          oneOf:
+          - type: string
+            format: email
+            maxLength: 254
+          - type: string
+            maxLength: 0
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - password
+      - username
+    TokenObtainPair:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - refresh
+    TokenObtainPairRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+          minLength: 1
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - password
+      - username
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+      required:
+      - access
+    TokenRefreshRequest:
+      type: object
+      properties:
+        refresh:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - refresh
+    VendorApplication:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        business_name:
+          type: string
+          maxLength: 150
+        description:
+          type: string
+        contact_email:
+          type: string
+          format: email
+          maxLength: 254
+        contact_phone:
+          type: string
+          maxLength: 20
+        status:
+          allOf:
+          - $ref: '#/components/schemas/VendorApplicationStatusEnum'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - business_name
+      - contact_email
+      - contact_phone
+      - created_at
+      - description
+      - id
+      - status
+    VendorApplicationRequest:
+      type: object
+      properties:
+        business_name:
+          type: string
+          minLength: 1
+          maxLength: 150
+        description:
+          type: string
+          minLength: 1
+        contact_email:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 254
+        contact_phone:
+          type: string
+          minLength: 1
+          maxLength: 20
+      required:
+      - business_name
+      - contact_email
+      - contact_phone
+      - description
+    VendorApplicationStatusEnum:
+      enum:
+      - pending
+      - approved
+      - rejected
+      type: string
+      description: |-
+        * `pending` - Pending
+        * `approved` - Approved
+        * `rejected` - Rejected
+    VendorProduct:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        category:
+          type: integer
+        name:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        stock:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        image:
+          nullable: true
+          oneOf:
+          - type: string
+            format: uri
+            maxLength: 200
+          - type: string
+            maxLength: 0
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - category
+      - created_at
+      - description
+      - id
+      - name
+      - price
+      - updated_at
+    VendorProductRequest:
+      type: object
+      properties:
+        category:
+          type: integer
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        description:
+          type: string
+          minLength: 1
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        stock:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        image:
+          nullable: true
+          oneOf:
+          - type: string
+            format: uri
+            maxLength: 200
+          - type: string
+            maxLength: 0
+      required:
+      - category
+      - description
+      - name
+      - price
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

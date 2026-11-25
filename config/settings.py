@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'accounts',
     'products',
+    "drf_spectacular",
+
 ]
 
 MIDDLEWARE = [
@@ -146,5 +148,22 @@ CORS_ALLOWED_ORIGINS = [
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication",
+        
     ],
+      "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "QELVORA API",
+    "DESCRIPTION": """
+    QELVORA Fashion E-Commerce API.
+
+    This API manages customer accounts, authentication,
+    products, categories, shopping carts, orders,
+    vendor applications and admin operations.
+    """,
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "COMPONENT_SPLIT_REQUEST": True,
 }

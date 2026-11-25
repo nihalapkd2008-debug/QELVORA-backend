@@ -15,11 +15,24 @@ from .views import (
     CartItemDetailView,
     OrderCreateView,
     OrderHistoryView,
+    VendorProductViewSet,
+    AdminProductViewSet,
 )
 
 router = DefaultRouter()
 router.register("categories", CategoryViewSet)
 router.register("products", ProductViewSet)
+router.register(
+    "vendor/products",
+    VendorProductViewSet,
+    basename="vendor-products"
+)
+router.register(
+    "admin/products",
+    AdminProductViewSet,
+    basename="admin-products"
+)
+
 
 urlpatterns = [
     # Authentication
