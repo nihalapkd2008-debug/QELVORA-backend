@@ -115,17 +115,34 @@ class CartSerializer(serializers.ModelSerializer):
 
 # CART ADD REQUEST SERIALIZER
 class CartAddItemSerializer(serializers.Serializer):
-    product_id = serializers.IntegerField()
+    product_id = serializers.IntegerField(
+        error_messages={
+            "required": "product_id is required.",
+            "invalid": "Product ID must be a valid number.",
+        }
+    )
+
     quantity = serializers.IntegerField(
         required=False,
         default=1,
-        min_value=1
+        min_value=1,
+        error_messages={
+            "invalid": "Quantity must be a valid number.",
+            "min_value": "Quantity must be at least 1.",
+        },
     )
 
 
 # CART UPDATE REQUEST SERIALIZER
 class CartQuantityUpdateSerializer(serializers.Serializer):
-    quantity = serializers.IntegerField(min_value=1)
+    quantity = serializers.IntegerField(
+        min_value=1,
+        error_messages={
+            "required": "A valid quantity is required.",
+            "invalid": "A valid quantity is required.",
+            "min_value": "Quantity must be at least 1.",
+        },
+    )
 
 
 # ORDER ITEM SERIALIZER

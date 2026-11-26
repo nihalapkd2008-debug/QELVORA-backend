@@ -417,28 +417,18 @@ class CartView(APIView):
         },
     )
     def post(self, request):
-        product_id = request.data.get("product_id")
-        quantity = request.data.get("quantity", 1)
+        serializer = CartAddItemSerializer(data=request.data)
 
-        if product_id is None:
+        if not serializer.is_valid():
+            error = next(iter(serializer.errors.values()))[0]
+
             return Response(
-                {"error": "product_id is required."},
+                {"error": str(error)},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        try:
-            quantity = int(quantity)
-        except (TypeError, ValueError):
-            return Response(
-                {"error": "Quantity must be a valid number."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        if quantity < 1:
-            return Response(
-                {"error": "Quantity must be at least 1."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        product_id = serializer.validated_data["product_id"]
+        quantity = serializer.validated_data["quantity"]
 
         product = get_object_or_404(Product, id=product_id)
 
@@ -464,6 +454,7 @@ class CartView(APIView):
         cart_item.save()
 
         serializer = CartSerializer(cart)
+
         return Response(
             serializer.data,
             status=status.HTTP_200_OK
