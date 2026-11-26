@@ -5,7 +5,6 @@ from rest_framework.test import APITestCase
 
 from accounts.models import UserProfile
 
-
 User = get_user_model()
 
 
@@ -91,9 +90,9 @@ class VendorApplicationTests(APITestCase):
         self.customer.profile.refresh_from_db()
 
         self.assertEqual(
-            self.customer.profile.role,
-            UserProfile.Role.VENDOR,
-        )
+    self.customer.profile.role,
+    UserProfile.Role.VENDOR,
+)
 
         self.assertEqual(
             self.customer.profile.vendor_status,

@@ -6,7 +6,6 @@ from rest_framework.test import APITestCase
 from accounts.models import UserProfile
 from products.models import Category, Product
 
-
 User = get_user_model()
 
 

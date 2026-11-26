@@ -1,8 +1,9 @@
 
 from collections import defaultdict
-from django.db import transaction
-from products.models import Product
 
+from django.db import transaction
+
+from products.models import Product
 
 # ==================================================
 # QELVORA - PRODUCT IMAGE MAPPING

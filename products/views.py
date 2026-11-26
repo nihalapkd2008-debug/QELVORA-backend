@@ -1,44 +1,40 @@
 
 from django.db import transaction
 from django.shortcuts import get_object_or_404
-
-from accounts.permissions import IsApprovedVendor, IsAdmin
-
-from rest_framework import viewsets, generics, status, serializers
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.filters import OrderingFilter
-
 from drf_spectacular.utils import (
-    extend_schema,
-    extend_schema_view,
     OpenApiParameter,
     OpenApiResponse,
+    extend_schema,
+    extend_schema_view,
 )
+from rest_framework import generics, serializers, status, viewsets
+from rest_framework.filters import OrderingFilter
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from accounts.permissions import IsAdmin, IsApprovedVendor
 
 from .models import (
-    Category,
-    Product,
     Cart,
     CartItem,
+    Category,
     Order,
     OrderItem,
+    Product,
 )
-
 from .serializers import (
-    CategorySerializer,
-    ProductSerializer,
-    VendorProductSerializer,
     AdminProductSerializer,
-    RegisterSerializer,
-    CurrentUserSerializer,
-    CartSerializer,
-    OrderSerializer,
     CartAddItemSerializer,
     CartQuantityUpdateSerializer,
+    CartSerializer,
+    CategorySerializer,
+    CurrentUserSerializer,
+    OrderSerializer,
+    ProductSerializer,
+    RegisterSerializer,
+    VendorProductSerializer,
 )
-
 
 # DOCUMENTATION RESPONSE SERIALIZERS
 
@@ -263,8 +259,10 @@ class VendorProductViewSet(viewsets.ModelViewSet):
     create=extend_schema(
         tags=["Admin Products"],
         summary="Create Product",
-        description="Allows administrators to create products and optionally assign a vendor.",
-        request=AdminProductSerializer,
+description=(
+    "Allows administrators to create products "
+    "and optionally assign a vendor."
+),        request=AdminProductSerializer,
         responses={
             201: AdminProductSerializer,
             400: OpenApiResponse(description="Invalid product details."),
@@ -362,7 +360,12 @@ class CurrentUserView(APIView):
         """,
         responses={
             200: CurrentUserSerializer,
-            401: OpenApiResponse(description="Authentication credentials were not provided or are invalid."),
+            401: OpenApiResponse(
+    description=(
+        "Authentication credentials were not provided "
+        "or are invalid."
+    )
+),
         },
     )
     def get(self, request):
@@ -390,9 +393,9 @@ class CartView(APIView):
         },
     )
     def get(self, request):
-        cart, created = Cart.objects.get_or_create(
-            user=request.user
-        )
+        cart, _ = Cart.objects.get_or_create(
+    user=request.user
+)
 
         serializer = CartSerializer(cart)
         return Response(serializer.data)
@@ -432,9 +435,9 @@ class CartView(APIView):
 
         product = get_object_or_404(Product, id=product_id)
 
-        cart, created = Cart.objects.get_or_create(
-            user=request.user
-        )
+        cart, _ = Cart.objects.get_or_create(
+    user=request.user
+)
 
         cart_item, item_created = CartItem.objects.get_or_create(
             cart=cart,

@@ -1,11 +1,10 @@
 from django.contrib.auth import get_user_model
 from rest_framework import generics
-from accounts.permissions import IsAdmin
-from .serializers import AdminUserSerializer
 from rest_framework.permissions import IsAuthenticated
 
-from .models import VendorApplication
-from .serializers import VendorApplicationSerializer
+from accounts.permissions import IsAdmin
+
+from .serializers import AdminUserSerializer, VendorApplicationSerializer
 
 User = get_user_model()
 
@@ -14,7 +13,7 @@ class VendorApplicationView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        application = serializer.save(user=self.request.user)
+        serializer.save(user=self.request.user)
 
         profile = self.request.user.profile
         profile.role = "vendor"

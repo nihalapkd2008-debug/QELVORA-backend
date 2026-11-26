@@ -1,19 +1,18 @@
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
-
 from rest_framework import serializers
 
 from accounts.models import UserProfile
+
 from .models import (
-    Category,
-    Product,
     Cart,
     CartItem,
+    Category,
     Order,
     OrderItem,
+    Product,
 )
-
 
 User = get_user_model()
 

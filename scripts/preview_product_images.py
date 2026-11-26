@@ -1,7 +1,6 @@
 from pathlib import Path
-from django.conf import settings
+
 from products.models import Product
-import json
 
 products = Product.objects.select_related("category").order_by("id")
 

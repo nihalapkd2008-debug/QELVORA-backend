@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import VendorApplicationView
-from .views import AdminUserListView, AdminUserDetailView
+
+from .views import AdminUserDetailView, AdminUserListView, VendorApplicationView
+
 urlpatterns = [
     path(
         "vendor/apply/",

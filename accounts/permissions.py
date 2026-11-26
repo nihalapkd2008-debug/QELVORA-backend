@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.permissions import BasePermission
 
 
@@ -19,12 +20,13 @@ class IsApprovedVendor(BasePermission):
 
         try:
             profile = user.profile
-            return (
-                profile.role == "vendor"
-                and profile.vendor_status == "approved"
-            )
-        except Exception:
+        except ObjectDoesNotExist:
             return False
+
+        return (
+            profile.role == "vendor"
+            and profile.vendor_status == "approved"
+        )
 
 
 class IsCustomer(BasePermission):
@@ -35,6 +37,8 @@ class IsCustomer(BasePermission):
             return False
 
         try:
-            return user.profile.role == "customer"
-        except Exception:
+            profile = user.profile
+        except ObjectDoesNotExist:
             return False
+
+        return profile.role == "customer"

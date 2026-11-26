@@ -7,16 +7,16 @@ from rest_framework_simplejwt.views import (
 )
 
 from .views import (
-    CategoryViewSet,
-    ProductViewSet,
-    RegisterView,
-    CurrentUserView,
-    CartView,
+    AdminProductViewSet,
     CartItemDetailView,
+    CartView,
+    CategoryViewSet,
+    CurrentUserView,
     OrderCreateView,
     OrderHistoryView,
+    ProductViewSet,
+    RegisterView,
     VendorProductViewSet,
-    AdminProductViewSet,
 )
 
 router = DefaultRouter()
