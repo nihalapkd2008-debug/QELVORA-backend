@@ -13,7 +13,11 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from accounts.permissions import IsAdmin, IsApprovedVendor
+from accounts.permissions import (
+    IsAdmin,
+    IsApprovedVendor,
+    IsCustomerOrVendor,
+)
 
 from .models import (
     Cart,
@@ -23,6 +27,7 @@ from .models import (
     OrderItem,
     Product,
 )
+from .pagination import AdminProductPagination
 from .serializers import (
     AdminProductSerializer,
     CartAddItemSerializer,
@@ -152,7 +157,9 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         responses={
             200: VendorProductSerializer(many=True),
             401: OpenApiResponse(description="Authentication required."),
-            403: OpenApiResponse(description="Approved vendor permission required."),
+            403: OpenApiResponse(
+                description="Approved vendor permission required."
+            ),
         },
     ),
     retrieve=extend_schema(
@@ -179,7 +186,9 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         responses={
             201: VendorProductSerializer,
             400: OpenApiResponse(description="Invalid product details."),
-            403: OpenApiResponse(description="Approved vendor permission required."),
+            403: OpenApiResponse(
+                description="Approved vendor permission required."
+            ),
         },
     ),
     update=extend_schema(
@@ -259,14 +268,17 @@ class VendorProductViewSet(viewsets.ModelViewSet):
     create=extend_schema(
         tags=["Admin Products"],
         summary="Create Product",
-description=(
-    "Allows administrators to create products "
-    "and optionally assign a vendor."
-),        request=AdminProductSerializer,
+        description=(
+            "Allows administrators to create products "
+            "and optionally assign a vendor."
+        ),
+        request=AdminProductSerializer,
         responses={
             201: AdminProductSerializer,
             400: OpenApiResponse(description="Invalid product details."),
-            403: OpenApiResponse(description="Administrator permission required."),
+            403: OpenApiResponse(
+                description="Administrator permission required."
+            ),
         },
     ),
     update=extend_schema(
@@ -307,11 +319,12 @@ description=(
 class AdminProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.select_related(
         "category",
-        "vendor"
-    ).all()
+        "vendor",
+    ).all().order_by("-id")
 
     serializer_class = AdminProductSerializer
     permission_classes = [IsAdmin]
+    pagination_class = AdminProductPagination
 
 
 # USER REGISTRATION
@@ -331,7 +344,9 @@ class AdminProductViewSet(viewsets.ModelViewSet):
         request=RegisterSerializer,
         responses={
             201: RegisterSerializer,
-            400: OpenApiResponse(description="Registration validation failed."),
+            400: OpenApiResponse(
+                description="Registration validation failed."
+            ),
         },
     ),
 )
@@ -361,11 +376,11 @@ class CurrentUserView(APIView):
         responses={
             200: CurrentUserSerializer,
             401: OpenApiResponse(
-    description=(
-        "Authentication credentials were not provided "
-        "or are invalid."
-    )
-),
+                description=(
+                    "Authentication credentials were not provided "
+                    "or are invalid."
+                )
+            ),
         },
     )
     def get(self, request):
@@ -376,13 +391,13 @@ class CurrentUserView(APIView):
 # CART API
 
 class CartView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsCustomerOrVendor]
 
     @extend_schema(
         tags=["Cart"],
         summary="Retrieve Shopping Cart",
         description="""
-        Retrieves the shopping cart of the authenticated customer.
+        Retrieves the shopping cart of the authenticated customer or vendor.
 
         Creates an empty cart if one does not already exist.
         Requires authentication.
@@ -393,9 +408,7 @@ class CartView(APIView):
         },
     )
     def get(self, request):
-        cart, _ = Cart.objects.get_or_create(
-    user=request.user
-)
+        cart, _ = Cart.objects.get_or_create(user=request.user)
 
         serializer = CartSerializer(cart)
         return Response(serializer.data)
@@ -404,7 +417,7 @@ class CartView(APIView):
         tags=["Cart"],
         summary="Add Product to Cart",
         description="""
-        Adds a product to the authenticated customer's cart.
+        Adds a product to the authenticated customer's or vendor's cart.
 
         If the product already exists in the cart,
         its quantity is increased.
@@ -427,7 +440,7 @@ class CartView(APIView):
 
             return Response(
                 {"error": str(error)},
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         product_id = serializer.validated_data["product_id"]
@@ -435,14 +448,12 @@ class CartView(APIView):
 
         product = get_object_or_404(Product, id=product_id)
 
-        cart, _ = Cart.objects.get_or_create(
-    user=request.user
-)
+        cart, _ = Cart.objects.get_or_create(user=request.user)
 
         cart_item, item_created = CartItem.objects.get_or_create(
             cart=cart,
             product=product,
-            defaults={"quantity": quantity}
+            defaults={"quantity": quantity},
         )
 
         if not item_created:
@@ -451,7 +462,7 @@ class CartView(APIView):
         if cart_item.quantity > product.stock:
             return Response(
                 {"error": "Requested quantity exceeds available stock."},
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         cart_item.save()
@@ -460,21 +471,21 @@ class CartView(APIView):
 
         return Response(
             serializer.data,
-            status=status.HTTP_200_OK
+            status=status.HTTP_200_OK,
         )
 
 
 # CART ITEM UPDATE / DELETE
 
 class CartItemDetailView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsCustomerOrVendor]
 
     @extend_schema(
         tags=["Cart"],
         summary="Update Cart Item Quantity",
         description="""
         Updates the quantity of a cart item belonging
-        to the authenticated customer.
+        to the authenticated customer or vendor.
 
         Quantity must be at least 1 and cannot exceed
         the available product stock.
@@ -492,42 +503,39 @@ class CartItemDetailView(APIView):
         cart_item = get_object_or_404(
             CartItem,
             id=item_id,
-            cart__user=request.user
+            cart__user=request.user,
         )
 
-        quantity = request.data.get("quantity")
+        serializer = CartQuantityUpdateSerializer(data=request.data)
 
-        try:
-            quantity = int(quantity)
-        except (TypeError, ValueError):
+        if not serializer.is_valid():
+            error = next(iter(serializer.errors.values()))[0]
+
             return Response(
-                {"error": "A valid quantity is required."},
-                status=status.HTTP_400_BAD_REQUEST
+                {"error": str(error)},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if quantity < 1:
-            return Response(
-                {"error": "Quantity must be at least 1."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        quantity = serializer.validated_data["quantity"]
 
         if quantity > cart_item.product.stock:
             return Response(
                 {"error": "Requested quantity exceeds available stock."},
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         cart_item.quantity = quantity
         cart_item.save()
 
-        serializer = CartSerializer(cart_item.cart)
-        return Response(serializer.data)
+        response_serializer = CartSerializer(cart_item.cart)
+
+        return Response(response_serializer.data)
 
     @extend_schema(
         tags=["Cart"],
         summary="Remove Cart Item",
         description="""
-        Removes a cart item belonging to the authenticated customer.
+        Removes a cart item belonging to the authenticated customer or vendor.
 
         Returns the updated shopping cart.
         """,
@@ -543,7 +551,7 @@ class CartItemDetailView(APIView):
         cart_item = get_object_or_404(
             CartItem,
             id=item_id,
-            cart__user=request.user
+            cart__user=request.user,
         )
 
         cart = cart_item.cart
@@ -556,13 +564,13 @@ class CartItemDetailView(APIView):
 # CREATE ORDER
 
 class OrderCreateView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsCustomerOrVendor]
 
     @extend_schema(
         tags=["Orders"],
         summary="Place Customer Order",
         description="""
-        Creates an order using the authenticated customer's cart.
+        Creates an order using the authenticated customer's or vendor's cart.
 
         Before creating the order, the API:
         - Checks whether the cart contains products.
@@ -595,7 +603,7 @@ class OrderCreateView(APIView):
         if not cart_items:
             return Response(
                 {"error": "Your cart is empty."},
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         total_price = 0
@@ -610,14 +618,14 @@ class OrderCreateView(APIView):
                     {
                         "error": f"Insufficient stock for {product.name}."
                     },
-                    status=status.HTTP_400_BAD_REQUEST
+                    status=status.HTTP_400_BAD_REQUEST,
                 )
 
             total_price += product.price * item.quantity
 
         order = Order.objects.create(
             user=request.user,
-            total_price=total_price
+            total_price=total_price,
         )
 
         for item in cart_items:
@@ -629,7 +637,7 @@ class OrderCreateView(APIView):
                 order=order,
                 product=product,
                 quantity=item.quantity,
-                price=product.price
+                price=product.price,
             )
 
             product.stock -= item.quantity
@@ -642,9 +650,9 @@ class OrderCreateView(APIView):
         return Response(
             {
                 "message": "Order placed successfully.",
-                "order": serializer.data
+                "order": serializer.data,
             },
-            status=status.HTTP_201_CREATED
+            status=status.HTTP_201_CREATED,
         )
 
 
@@ -655,12 +663,12 @@ class OrderCreateView(APIView):
         tags=["Orders"],
         summary="Retrieve Customer Order History",
         description="""
-        Retrieves the order history of the authenticated customer.
+        Retrieves the order history of the authenticated customer or vendor.
 
         Orders are returned in descending order of creation date.
         Each order includes its items and product details.
 
-        A customer can only retrieve their own orders.
+        A user can only retrieve their own orders.
         """,
         responses={
             200: OrderSerializer(many=True),
@@ -670,7 +678,7 @@ class OrderCreateView(APIView):
 )
 class OrderHistoryView(generics.ListAPIView):
     serializer_class = OrderSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsCustomerOrVendor]
 
     def get_queryset(self):
         return (

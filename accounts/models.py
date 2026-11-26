@@ -32,7 +32,12 @@ class UserProfile(models.Model):
         choices=VendorStatus.choices,
         default=VendorStatus.NOT_APPLICABLE
     )
-
+    google_sub = models.CharField(
+        max_length=255,
+        unique=True,
+        null=True,
+        blank=True
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

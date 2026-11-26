@@ -4,10 +4,8 @@ from django.dispatch import receiver
 
 from .models import UserProfile
 
-User = get_user_model()
 
-
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=get_user_model())
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.get_or_create(user=instance)

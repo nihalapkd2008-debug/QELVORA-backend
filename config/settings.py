@@ -14,11 +14,11 @@ import os
 from pathlib import Path
 
 from dotenv import load_dotenv
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv(BASE_DIR / ".env")
 
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
@@ -149,14 +149,22 @@ CORS_ALLOWED_ORIGINS = [
     ).split(",")
     if origin.strip()
 ]
+
+
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-        
     ],
-      "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_PAGINATION_CLASS": (
+        "rest_framework.pagination.LimitOffsetPagination"
+    ),
+    "PAGE_SIZE": 10,
 }
+
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "QELVORA API",

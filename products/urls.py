@@ -20,25 +20,33 @@ from .views import (
 )
 
 router = DefaultRouter()
+
 router.register("categories", CategoryViewSet)
 router.register("products", ProductViewSet)
 router.register(
     "vendor/products",
     VendorProductViewSet,
-    basename="vendor-products"
+    basename="vendor-products",
 )
 router.register(
     "admin/products",
     AdminProductViewSet,
-    basename="admin-products"
+    basename="admin-products",
 )
-
 
 urlpatterns = [
     # Authentication
     path("auth/register/", RegisterView.as_view(), name="register"),
-    path("auth/login/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    path("auth/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path(
+        "auth/login/",
+        TokenObtainPairView.as_view(),
+        name="token_obtain_pair",
+    ),
+    path(
+        "auth/refresh/",
+        TokenRefreshView.as_view(),
+        name="token_refresh",
+    ),
     path("auth/me/", CurrentUserView.as_view(), name="current_user"),
 
     # Cart
@@ -46,10 +54,10 @@ urlpatterns = [
     path(
         "cart/items/<int:item_id>/",
         CartItemDetailView.as_view(),
-        name="cart-item-detail"
+        name="cart-item-detail",
     ),
 
-    # Day 5 - Orders
+    # Orders
     path("orders/", OrderCreateView.as_view(), name="order-create"),
     path("orders/history/", OrderHistoryView.as_view(), name="order-history"),
 ]

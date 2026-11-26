@@ -42,3 +42,16 @@ class IsCustomer(BasePermission):
             return False
 
         return profile.role == "customer"
+class IsCustomerOrVendor(BasePermission):
+    def has_permission(self, request, view):
+        user = request.user
+
+        if not user or not user.is_authenticated:
+            return False
+
+        try:
+            profile = user.profile
+        except ObjectDoesNotExist:
+            return False
+
+        return profile.role in ["customer", "vendor"]
