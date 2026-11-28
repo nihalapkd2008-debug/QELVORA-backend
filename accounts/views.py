@@ -24,6 +24,23 @@ from .serializers import (
 
 User = get_user_model()
 
+class CurrentUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        profile = getattr(user, "profile", None)
+
+        return Response({
+            "id": user.id,
+            "username": user.username,
+            "email": user.email,
+            "is_staff": user.is_staff,
+            "role": profile.role if profile else "customer",
+            "vendor_status": (
+                profile.vendor_status if profile else "not_applicable"
+            ),
+        })
 
 class GoogleLoginView(APIView):
     permission_classes = [AllowAny]

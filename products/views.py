@@ -29,12 +29,14 @@ from .models import (
 )
 from .pagination import AdminProductPagination
 from .serializers import (
+    AdminOrderStatusSerializer,
     AdminProductSerializer,
     CartAddItemSerializer,
     CartQuantityUpdateSerializer,
     CartSerializer,
     CategorySerializer,
     CurrentUserSerializer,
+    OrderCreateSerializer,
     OrderSerializer,
     ProductSerializer,
     RegisterSerializer,
@@ -563,6 +565,9 @@ class CartItemDetailView(APIView):
 
 # CREATE ORDER
 
+
+# CREATE ORDER
+
 class OrderCreateView(APIView):
     permission_classes = [IsCustomerOrVendor]
 
@@ -570,21 +575,12 @@ class OrderCreateView(APIView):
         tags=["Orders"],
         summary="Place Customer Order",
         description="""
-        Creates an order using the authenticated customer's or vendor's cart.
-
-        Before creating the order, the API:
-        - Checks whether the cart contains products.
-        - Checks available product stock.
-        - Calculates the total order price.
-        - Creates the order and order items.
-        - Reduces product stock.
-        - Clears the customer's cart.
-
-        The operation is performed within a database transaction.
-
-        No request body is required.
+        Creates an order using the authenticated user's cart.
+        Requires delivery details and payment method.
+        Checks product stock, creates order items,
+        reduces stock and clears the cart.
         """,
-        request=None,
+        request=OrderCreateSerializer,
         responses={
             201: OrderCreateResponseSerializer,
             400: ErrorResponseSerializer,
@@ -594,6 +590,17 @@ class OrderCreateView(APIView):
     )
     @transaction.atomic
     def post(self, request):
+        # Validate delivery details
+        details_serializer = OrderCreateSerializer(data=request.data)
+
+        if not details_serializer.is_valid():
+            return Response(
+                {"error": details_serializer.errors},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        details = details_serializer.validated_data
+
         cart = get_object_or_404(Cart, user=request.user)
 
         cart_items = list(
@@ -623,11 +630,14 @@ class OrderCreateView(APIView):
 
             total_price += product.price * item.quantity
 
+        # Create order with delivery details
         order = Order.objects.create(
             user=request.user,
             total_price=total_price,
+            **details,
         )
 
+        # Create order items and reduce stock
         for item in cart_items:
             product = Product.objects.select_for_update().get(
                 id=item.product_id
@@ -643,6 +653,7 @@ class OrderCreateView(APIView):
             product.stock -= item.quantity
             product.save(update_fields=["stock"])
 
+        # Clear cart after successful order
         cart.items.all().delete()
 
         serializer = OrderSerializer(order)
@@ -656,7 +667,37 @@ class OrderCreateView(APIView):
         )
 
 
-# ORDER HISTORY
+
+
+# ADMIN ORDER MANAGEMENT
+
+class AdminOrderListView(generics.ListAPIView):
+    serializer_class = OrderSerializer
+    permission_classes = [IsAdmin]
+
+    def get_queryset(self):
+        return (
+            Order.objects
+            .select_related("user")
+            .prefetch_related("items__product__category")
+            .order_by("-created_at")
+        )
+
+
+class AdminOrderDetailView(generics.RetrieveUpdateAPIView):
+    serializer_class = AdminOrderStatusSerializer
+    permission_classes = [IsAdmin]
+    http_method_names = ["get", "patch", "head", "options"]
+
+    def get_queryset(self):
+        return (
+            Order.objects
+            .select_related("user")
+            .prefetch_related("items__product__category")
+        )
+
+
+# CUSTOMER ORDER HISTORY
 
 @extend_schema_view(
     get=extend_schema(

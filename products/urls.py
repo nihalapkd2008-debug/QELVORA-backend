@@ -7,6 +7,8 @@ from rest_framework_simplejwt.views import (
 )
 
 from .views import (
+    AdminOrderDetailView,
+    AdminOrderListView,
     AdminProductViewSet,
     CartItemDetailView,
     CartView,
@@ -60,6 +62,16 @@ urlpatterns = [
     # Orders
     path("orders/", OrderCreateView.as_view(), name="order-create"),
     path("orders/history/", OrderHistoryView.as_view(), name="order-history"),
+    path(
+    "admin/orders/",
+    AdminOrderListView.as_view(),
+    name="admin-orders",
+),
+path(
+    "admin/orders/<int:pk>/",
+    AdminOrderDetailView.as_view(),
+    name="admin-order-detail",
+),
 ]
 
 urlpatterns += router.urls

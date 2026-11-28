@@ -166,13 +166,39 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = [
-            "id",
-            "user",
-            "items",
-            "total_price",
-            "status",
-            "created_at",
-        ]
+    "id",
+    "user",
+    "items",
+    "total_price",
+    "status",
+    "full_name",
+    "phone_number",
+    "address",
+    "city",
+    "state",
+    "postal_code",
+    "payment_method",
+    "created_at",
+]
+
+        
+class AdminOrderStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ["status"]
+
+
+class OrderCreateSerializer(serializers.Serializer):
+    full_name = serializers.CharField(max_length=150)
+    phone_number = serializers.CharField(max_length=15)
+    address = serializers.CharField()
+    city = serializers.CharField(max_length=100)
+    state = serializers.CharField(max_length=100)
+    postal_code = serializers.CharField(max_length=10)
+    payment_method = serializers.ChoiceField(
+        choices=[("cod", "Cash on Delivery")],
+        default="cod"
+    )
 
 
 # VENDOR PRODUCT SERIALIZER

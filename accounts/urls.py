@@ -8,6 +8,7 @@ from .views import (
     AdminVendorApplicationListView,
     GoogleLoginView,
     VendorApplicationView,
+    CurrentUserView
 )
 
 urlpatterns = [
@@ -42,4 +43,11 @@ path(
     AdminVendorApplicationDetailView.as_view(),
     name="admin-vendor-application-detail",
 ),
+
+path(
+    "me/",
+    CurrentUserView.as_view(),
+    name="current-user",
+),
+
 ]

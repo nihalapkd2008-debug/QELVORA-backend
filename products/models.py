@@ -159,6 +159,18 @@ class Order(models.Model):
         default=Status.PENDING
     )
 
+    full_name = models.CharField(max_length=150, blank=True, default="")
+    phone_number = models.CharField(max_length=15, blank=True, default="")
+    address = models.TextField(blank=True, default="")
+    city = models.CharField(max_length=100, blank=True, default="")
+    state = models.CharField(max_length=100, blank=True, default="")
+    postal_code = models.CharField(max_length=10, blank=True, default="")
+
+    payment_method = models.CharField(
+        max_length=30,
+        default="cod"
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
