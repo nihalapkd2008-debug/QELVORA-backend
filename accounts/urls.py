@@ -6,9 +6,9 @@ from .views import (
     AdminUserListView,
     AdminVendorApplicationDetailView,
     AdminVendorApplicationListView,
+    CurrentUserView,
     GoogleLoginView,
     VendorApplicationView,
-    CurrentUserView
 )
 
 urlpatterns = [

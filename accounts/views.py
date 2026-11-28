@@ -13,8 +13,8 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from accounts.permissions import IsAdmin
+
 from .models import UserProfile, VendorApplication
-from .models import VendorApplication
 from .serializers import (
     AdminUserSerializer,
     GoogleLoginSerializer,
